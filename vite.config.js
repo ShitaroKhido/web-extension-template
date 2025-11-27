@@ -43,6 +43,12 @@ const baseManifest = {
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self';",
   },
+  web_accessible_resources: [
+    {
+      resources: ["*"],
+      matches: ["<all_urls>"],
+    },
+  ],
 };
 
 export default defineConfig(({ mode }) => {
