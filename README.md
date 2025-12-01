@@ -1,55 +1,83 @@
-# Chrome Extension Template
+# Minimal Web Extension Template
 
-This is a template for creating Chrome extensions using Vite and Manifest V3.
+A small, minimal template for building browser extensions. It focuses on Vite-based builds for Manifest V3 (Chrome) and optional Firefox support.
 
-## Setup
+Quick Start
 
-1. Clone or copy this template.
-2. Add your extension icon to `public/icon/icon.png` (see `public/icon/README.md` for details).
-3. Update `package.json` with your project name.
-4. Configure your extension in `.env` file (name, version, permissions, etc.).
-5. Add your extension logic in `src/js/`.
-6. Run `npm install` to install dependencies.
+1. Install dependencies
 
-## Configuration
+```bash
+npm install
+```
 
-The `.env` file allows you to customize your extension without modifying code:
+1. Run dev server (Chrome):
 
-- `VITE_APP_NAME` - Extension name
-- `VITE_APP_VERSION` - Extension version
-- `VITE_APP_DESCRIPTION` - Extension description
-- `VITE_PERMISSIONS` - Comma-separated permissions (e.g., `storage,tabs,activeTab`)
-- `VITE_HOST_PERMISSIONS` - Comma-separated host permissions (e.g., `https://example.com/*,https://google.com/*`)
-- `VITE_CONTENT_SCRIPT_MATCHES` - Comma-separated URL patterns for content scripts
-- `VITE_FIREFOX_ADDON_ID` - Firefox addon ID (for Firefox builds)
+```bash
+npm run dev:chrome
+```
 
-## Development
+Build
 
-- `npm run dev` - Start development server.
-- `npm run build` - Build for production.
-- `npm run preview` - Preview the built extension.
+- Chrome only:
 
-### Sass Support
+```bash
+npm run build:chrome
+```
 
-This template includes Sass/SCSS support out of the box. You can:
+- Firefox only:
 
-- Use `.scss` or `.sass` files in your project
-- Import them in your JavaScript or HTML files
-- Use Sass features like variables, nesting, mixins, and partials
-- See `src/popup.scss` for an example
+```bash
+npm run build:firefox
+```
 
-## Files Structure
+- Both targets (Chrome + Firefox):
 
-- `public/` - Static assets
-  - `icon/` - Extension icons
-- `src/` - Source files
-  - `popup.html` - Popup HTML
-  - `popup.css` - Popup styles
-  - `css/` - Additional CSS
-  - `js/` - JavaScript files
-- `temp/` - Temporary files (generated manifest)
-- `dist/` - Built extension
+```bash
+npm run build:all
+```
 
-## Author
+- Build and create ZIP packages:
 
-Created by [ShitaroKhido](https://github.com/ShitaroKhido)
+```bash
+npm run build:zip
+```
+
+Load the build in Chrome:
+
+- Open `chrome://extensions`, enable Developer Mode, and choose "Load unpacked" → `dist/chrome`.
+
+Icons
+
+- Place static icons in `src/public/icons/` (e.g., `icon-16.svg`, `icon-48.svg`, `icon-128.svg`).
+- `src/manifest.json` references these icons and the build will include them in `dist/*/icons/`.
+
+Environment variables
+
+This project supports `.env` files; Vite loads variables that start with `VITE_` and we map the important ones to the manifest during build:
+
+- `VITE_APP_NAME` - Optional manifest name override
+- `VITE_APP_VERSION` - Optional manifest version override
+- `VITE_APP_DESCRIPTION` - Optional manifest description override
+- `VITE_PERMISSIONS` - Comma-separated permissions to merge into `manifest.permissions`
+- `VITE_HOST_PERMISSIONS` - Comma-separated host permissions for `manifest.host_permissions`
+- `VITE_CONTENT_SCRIPT_MATCHES` - Comma-separated content script match patterns
+- `VITE_FIREFOX_ADDON_ID` - Optional Firefox add-on id for `browser_specific_settings.gecko.id`
+- `VITE_TARGET` - Optional target override in `.env` (e.g., `VITE_TARGET=firefox`)
+
+Project layout
+
+- `src/` - Source files (Vite root). Keep your popup, service worker, and content scripts here.
+
+- `popup/` - Popup HTML + JS
+- `background.js` - Background/service worker
+- `content-script.js` - Example content script
+- `manifest.json` - Manifest (we use a script to adapt for Firefox)
+- `public/` - Static files copied to build (icons live here)
+
+Demo: popup → content script
+
+1. Build or run dev server and load the extension in the browser.
+2. Open any web page and click the extension icon to open the popup.
+3. Click the button: the popup sends a message to the content script; the content script highlights the page briefly and the popup shows a response.
+
+That's all — this template is minimal so it's quick to fork and extend.
