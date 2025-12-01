@@ -4,12 +4,12 @@
   "description": "This is a template for creating Chrome extensions using Vite and Manifest V3.",
   "main": "vite.config.js",
   "scripts": {
-    "dev:chrome": "TARGET=chrome vite",
-    "dev:firefox": "TARGET=firefox vite",
-    "build:chrome": "TARGET=chrome vite build",
-    "build:firefox": "TARGET=firefox vite build",
-    "build:all": "npm run build:chrome && npm run build:firefox",
-    "build:zip": "npm run build:all && node scripts/zip-builds.js"
+    "dev": "TARGET=chrome WATCH=true vite build --watch --config vite.config.js",
+    "dev:chrome": "TARGET=chrome WATCH=true vite build --watch --config vite.config.js",
+    "dev:firefox": "TARGET=firefox WATCH=true vite build --watch --config vite.config.js",
+    "build": "npm run build:chrome && npm run build:firefox",
+    "build:chrome": "TARGET=chrome vite build --config vite.config.js && mkdir -p output/package && web-ext build --source-dir='output/dist-chrome' --artifacts-dir='output/package' --filename=chrome-extension.zip --overwrite-dest",
+    "build:firefox": "TARGET=firefox vite build --config vite.config.js && mkdir -p output/package && web-ext build --source-dir='output/dist-firefox' --artifacts-dir='output/package' --filename=firefox-extension.xpi --overwrite-dest"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,11 @@
   },
   "homepage": "https://github.com/ShitaroKhido/web-extension-template#readme",
   "devDependencies": {
+    "@create-web-ext/hot-reload": "^1.0.1",
     "archiver": "^7.0.1",
-    "vite": "^7.2.4",
+    "vite": "^7.2.6",
     "vite-plugin-web-extension": "^4.5.0",
+    "web-ext": "^9.2.0",
     "webextension-polyfill": "^0.12.0"
   }
 }
